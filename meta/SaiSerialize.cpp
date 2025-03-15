@@ -183,6 +183,10 @@ sai_status_t transfer_attribute(
 //            transfer_primitive(src_attr.value.s64, dst_attr.value.s64);
 //            break;
 
+        case SAI_ATTR_VALUE_TYPE_DOUBLE:
+            transfer_primitive(src_attr.value.d64, dst_attr.value.d64);
+            break;
+
         case SAI_ATTR_VALUE_TYPE_MAC:
             transfer_primitive(src_attr.value.mac, dst_attr.value.mac);
             break;
@@ -750,6 +754,34 @@ std::string sai_serialize_number(
     SWSS_LOG_ENTER();
 
     return sai_serialize_number<uint32_t>(number, hex);
+}
+
+std::string sai_serialize_decimal(
+        _In_ const double value,
+        _In_ int precision)
+{
+    SWSS_LOG_ENTER();
+
+    std::ostringstream stream;
+    stream << std::fixed << std::setprecision(precision) << value;
+
+    std::string str = stream.str();
+    if (str.find('.') != std::string::npos)
+    {
+        // remove trailing zeroes
+        str = str.substr(0, str.find_last_not_of('0') + 1);
+        // if the decimal point is now the last character, add a zero at the end
+        if (str.find('.') == str.size() - 1)
+        {
+            str = str + "0";
+        }
+    }
+    else
+    {
+        str = str + ".0";
+    }
+
+    return str;
 }
 
 std::string sai_serialize_attr_id(
@@ -2053,6 +2085,9 @@ std::string sai_serialize_attr_value(
 //        case SAI_ATTR_VALUE_TYPE_INT64:
 //            return sai_serialize_number(attr.value.s64);
 
+        case SAI_ATTR_VALUE_TYPE_DOUBLE:
+            return sai_serialize_decimal(attr.value.d64);
+
         case SAI_ATTR_VALUE_TYPE_MAC:
             return sai_serialize_mac(attr.value.mac);
 
@@ -3016,6 +3051,16 @@ void sai_deserialize_number(
     SWSS_LOG_ENTER();
 
     sai_deserialize_number<uint32_t>(s, number, hex);
+}
+
+void sai_deserialize_decimal(
+        _In_ const std::string& s,
+        _Out_ double& value)
+{
+    SWSS_LOG_ENTER();
+
+    char *endptr = NULL;
+    value = strtod(s.c_str(), &endptr);
 }
 
 void sai_deserialize_enum(
@@ -4053,6 +4098,9 @@ void sai_deserialize_attr_value(
 
 //        case SAI_ATTR_VALUE_TYPE_INT64:
 //            return sai_deserialize_number(s, attr.value.s64);
+
+        case SAI_ATTR_VALUE_TYPE_DOUBLE:
+            return sai_deserialize_decimal(s, attr.value.d64);
 
         case SAI_ATTR_VALUE_TYPE_MAC:
             return sai_deserialize_mac(s, attr.value.mac);
@@ -5212,6 +5260,7 @@ void sai_deserialize_free_attribute_value(
         case SAI_ATTR_VALUE_TYPE_INT32:
         case SAI_ATTR_VALUE_TYPE_UINT64:
         case SAI_ATTR_VALUE_TYPE_INT64:
+        case SAI_ATTR_VALUE_TYPE_DOUBLE:
         case SAI_ATTR_VALUE_TYPE_MAC:
         case SAI_ATTR_VALUE_TYPE_IPV4:
         case SAI_ATTR_VALUE_TYPE_IPV6:

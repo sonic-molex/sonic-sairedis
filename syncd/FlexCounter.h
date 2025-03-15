@@ -5,6 +5,7 @@ extern "C" {
 }
 
 #include "meta/SaiInterface.h"
+#include "FlexCounterOtai.h"
 
 #include "swss/table.h"
 
@@ -178,5 +179,7 @@ namespace syncd
             bool m_noDoubleCheckBulkCapability;
 
             static const std::map<std::string, std::string> m_plugIn2CounterType;
+
+            std::shared_ptr<FlexCounterOtai> m_flexCounterOtai;
     };
 }

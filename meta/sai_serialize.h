@@ -252,6 +252,10 @@ std::string sai_serialize_number_list(
         _In_ bool countOnly,
         _In_ bool hex = false);
 
+std::string sai_serialize_decimal(
+        _In_ const double value,
+        _In_ int precision = 2);
+
 std::string sai_serialize_attr_id(
         _In_ const sai_attr_metadata_t& meta);
 

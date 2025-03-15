@@ -51,7 +51,8 @@ libsaimeta_la_SOURCES = \
 				SaiSerialize.cpp \
 				SelectableChannel.cpp \
 				DummySaiInterface.cpp \
-				ZeroMQSelectableChannel.cpp
+				ZeroMQSelectableChannel.cpp \
+				otai_serialize.cpp
 
 libsaimeta_la_CPPFLAGS = $(CODE_COVERAGE_CPPFLAGS)
 libsaimeta_la_CXXFLAGS = $(DBGFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS_COMMON) $(CODE_COVERAGE_CXXFLAGS)

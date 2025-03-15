@@ -1825,6 +1825,7 @@ void Meta::meta_generic_validation_post_remove(
             case SAI_ATTR_VALUE_TYPE_INT32:
             case SAI_ATTR_VALUE_TYPE_UINT64:
             case SAI_ATTR_VALUE_TYPE_INT64:
+            case SAI_ATTR_VALUE_TYPE_DOUBLE:
             case SAI_ATTR_VALUE_TYPE_MAC:
             case SAI_ATTR_VALUE_TYPE_IPV4:
             case SAI_ATTR_VALUE_TYPE_IPV6:
@@ -4009,6 +4010,7 @@ sai_status_t Meta::meta_generic_validation_set(
         case SAI_ATTR_VALUE_TYPE_INT32:
         case SAI_ATTR_VALUE_TYPE_UINT64:
         case SAI_ATTR_VALUE_TYPE_INT64:
+        case SAI_ATTR_VALUE_TYPE_DOUBLE:
         case SAI_ATTR_VALUE_TYPE_MAC:
         case SAI_ATTR_VALUE_TYPE_IPV4:
         case SAI_ATTR_VALUE_TYPE_IPV6:
@@ -4520,6 +4522,7 @@ sai_status_t Meta::meta_generic_validation_get(
             case SAI_ATTR_VALUE_TYPE_INT32:
             case SAI_ATTR_VALUE_TYPE_UINT64:
             case SAI_ATTR_VALUE_TYPE_INT64:
+            case SAI_ATTR_VALUE_TYPE_DOUBLE:
             case SAI_ATTR_VALUE_TYPE_MAC:
             case SAI_ATTR_VALUE_TYPE_IPV4:
             case SAI_ATTR_VALUE_TYPE_IPV6:
@@ -4765,6 +4768,7 @@ void Meta::meta_generic_validation_post_get(
             case SAI_ATTR_VALUE_TYPE_INT32:
             case SAI_ATTR_VALUE_TYPE_UINT64:
             case SAI_ATTR_VALUE_TYPE_INT64:
+            case SAI_ATTR_VALUE_TYPE_DOUBLE:
             case SAI_ATTR_VALUE_TYPE_MAC:
             case SAI_ATTR_VALUE_TYPE_IPV4:
             case SAI_ATTR_VALUE_TYPE_IPV6:
@@ -5723,6 +5727,7 @@ void Meta::meta_generic_validation_post_create(
             case SAI_ATTR_VALUE_TYPE_INT32:
             case SAI_ATTR_VALUE_TYPE_UINT64:
             case SAI_ATTR_VALUE_TYPE_INT64:
+            case SAI_ATTR_VALUE_TYPE_DOUBLE:
             case SAI_ATTR_VALUE_TYPE_MAC:
             case SAI_ATTR_VALUE_TYPE_IPV4:
             case SAI_ATTR_VALUE_TYPE_IPV6:
@@ -5903,6 +5908,7 @@ void Meta::meta_generic_validation_post_set(
         case SAI_ATTR_VALUE_TYPE_INT32:
         case SAI_ATTR_VALUE_TYPE_UINT64:
         case SAI_ATTR_VALUE_TYPE_INT64:
+        case SAI_ATTR_VALUE_TYPE_DOUBLE:
         case SAI_ATTR_VALUE_TYPE_MAC:
         case SAI_ATTR_VALUE_TYPE_IPV4:
         case SAI_ATTR_VALUE_TYPE_IPV6:
