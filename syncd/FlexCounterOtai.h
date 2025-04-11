@@ -45,6 +45,7 @@ namespace syncd
         static const std::string COUNTER_TYPE_OCM_CHANNEL_STATS;
         static const std::string COUNTER_TYPE_OSC_STATS;
         static const std::string COUNTER_TYPE_OTDR_STATS;
+        static const std::string COUNTER_TYPE_OCS_CROSS_CONNECT_STATS;
 
     private:
         std::function<std::shared_ptr<BaseCounterContext>(_In_ const std::string &name)> m_getCounterContext;
@@ -53,7 +54,7 @@ namespace syncd
 
 
     #define OTN_SPECIALIZATION_IMPLEMENT()                          \
-    std::shared_ptr<BaseCounterContext> createOtaiCounterContext(    \
+    std::shared_ptr<BaseCounterContext> createOtaiCounterContext(   \
             _In_ const std::string &context_name,                   \
             _In_ std::shared_ptr<sairedis::SaiInterface> vendorSai, \
             _In_ sai_stats_mode_t statsMode)                        \
@@ -77,6 +78,11 @@ namespace syncd
         if (context_name == FlexCounterOtai::COUNTER_TYPE_OSC_STATS)\
         {                                                           \
             return std::make_shared<CounterContext<sai_otai_osc_stat_t>>(context_name, (sai_object_type_t)SAI_OBJECT_TYPE_OTAI_OSC, vendorSai.get(), statsMode);\
+        }                                                           \
+                                                                    \
+        if (context_name == FlexCounterOtai::COUNTER_TYPE_OCS_CROSS_CONNECT_STATS)\
+        {                                                           \
+            return std::make_shared<CounterContext<sai_otai_ocs_cross_connect_stat_t>>(context_name, (sai_object_type_t)SAI_OBJECT_TYPE_OTAI_OCS_CROSS_CONNECT, vendorSai.get(), statsMode);\
         }                                                           \
                                                                     \
         return nullptr;                                             \
@@ -184,6 +190,32 @@ namespace syncd
     {                                                               \
         SWSS_LOG_ENTER();                                           \
         sai_deserialize_otai_osc_attr(name, attr);                  \
+    }                                                               \
+                                                                    \
+    template <>                                                     \
+    std::string serializeStat(                                      \
+            _In_ const sai_otai_ocs_cross_connect_stat_t stat)      \
+    {                                                               \
+        SWSS_LOG_ENTER();                                           \
+        return sai_serialize_otai_ocs_cross_connect_stat(stat);     \
+    }                                                               \
+                                                                    \
+    template <>                                                     \
+    void deserializeStat(                                           \
+            _In_ const char *name,                                  \
+            _Out_ sai_otai_ocs_cross_connect_stat_t *stat)          \
+    {                                                               \
+        SWSS_LOG_ENTER();                                           \
+         sai_deserialize_otai_ocs_cross_connect_stat(name, stat);   \
+    }                                                               \
+                                                                    \
+    template <>                                                     \
+    void deserializeAttr(                                           \
+            _In_ const std::string &name,                           \
+            _Out_ sai_otai_ocs_cross_connect_attr_t &attr)          \
+    {                                                               \
+        SWSS_LOG_ENTER();                                           \
+        sai_deserialize_otai_ocs_cross_connect_attr(name, attr);    \
     }
 
 }

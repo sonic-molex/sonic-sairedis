@@ -11,6 +11,7 @@ const std::string FlexCounterOtai::COUNTER_TYPE_OCM_STATS = "OCM Stats Counter";
 const std::string FlexCounterOtai::COUNTER_TYPE_OCM_CHANNEL_STATS = "OCM Channel Stats Counter";
 const std::string FlexCounterOtai::COUNTER_TYPE_OSC_STATS = "OSC Stats Counter";
 const std::string FlexCounterOtai::COUNTER_TYPE_OTDR_STATS = "OTDR Stats Counter";
+const std::string FlexCounterOtai::COUNTER_TYPE_OCS_CROSS_CONNECT_STATS = "OCS Cross Connect Stats Counter";
 
 
 FlexCounterOtai::FlexCounterOtai(
@@ -97,6 +98,16 @@ bool FlexCounterOtai::addCounter(
         return true;
     }
 
+    if (extObjectType == SAI_OBJECT_TYPE_OTAI_OCS_CROSS_CONNECT && field == OCS_CROSS_CONNECT_COUNTER_STATS_LIST)
+    {
+        m_getCounterContext(COUNTER_TYPE_OCS_CROSS_CONNECT_STATS)->addObject(
+                vid,
+                rid,
+                idStrings,
+                "");
+        return true;
+    }
+
     return false;
 }
 
@@ -161,6 +172,15 @@ bool FlexCounterOtai::removeCounter(
         return true;
     }
 
+    if (extObjectType == SAI_OBJECT_TYPE_OTAI_OCS_CROSS_CONNECT)
+    {
+        if (m_hasCounterContext(COUNTER_TYPE_OCS_CROSS_CONNECT_STATS))
+        {
+            m_getCounterContext(COUNTER_TYPE_OCS_CROSS_CONNECT_STATS)->removeObject(vid);
+        }
+        return true;
+    }
+
     return false;
 }
 
@@ -203,6 +223,12 @@ bool FlexCounterOtai::addCounterPlugin(
     if (field == OTDR_STATS_PLUGIN_FIELD)
     {
         m_getCounterContext(COUNTER_TYPE_OTDR_STATS)->addPlugins(shaStrings);
+        return true;
+    }
+
+    if (field == OCS_CROSS_CONNECT_STATS_PLUGIN_FIELD)
+    {
+        m_getCounterContext(COUNTER_TYPE_OCS_CROSS_CONNECT_STATS)->addPlugins(shaStrings);
         return true;
     }
 
