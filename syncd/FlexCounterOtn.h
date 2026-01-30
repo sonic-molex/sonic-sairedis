@@ -42,6 +42,8 @@ namespace syncd
         static const std::string COUNTER_TYPE_OTN_ATTENUATOR_ATTR;
         static const std::string COUNTER_TYPE_OTN_OA_ATTR;
         static const std::string COUNTER_TYPE_OTN_OCM_CHANNEL_ATTR;
+        static const std::string COUNTER_TYPE_OTN_WSS_ATTR;
+        static const std::string COUNTER_TYPE_OTN_WSS_SPEC_POWER_ATTR;
         static const std::string COUNTER_TYPE_OTN_OSC_ATTR;
 
     private:
@@ -71,6 +73,16 @@ namespace syncd
         if (context_name == FlexCounterOtn::COUNTER_TYPE_OTN_OCM_CHANNEL_ATTR)\
         {                                                           \
             return std::make_shared<AttrContext<sai_otn_ocm_channel_attr_t>>(context_name, instance, (sai_object_type_t)SAI_OBJECT_TYPE_OTN_OCM_CHANNEL, vendorSai.get(), statsMode);\
+        }                                                           \
+                                                                    \
+        if (context_name == FlexCounterOtn::COUNTER_TYPE_OTN_WSS_ATTR)\
+        {                                                           \
+            return std::make_shared<AttrContext<sai_otn_wss_attr_t>>(context_name, (sai_object_type_t)SAI_OBJECT_TYPE_OTN_WSS, vendorSai.get(), statsMode);\
+        }                                                           \
+                                                                    \
+        if (context_name == FlexCounterOtn::COUNTER_TYPE_OTN_WSS_SPEC_POWER_ATTR)\
+        {                                                           \
+            return std::make_shared<AttrContext<sai_otn_wss_spec_power_attr_t>>(context_name, (sai_object_type_t)SAI_OBJECT_TYPE_OTN_WSS_SPEC_POWER, vendorSai.get(), statsMode);\
         }                                                           \
                                                                     \
         if (context_name == FlexCounterOtn::COUNTER_TYPE_OTN_OSC_ATTR)\
@@ -106,6 +118,24 @@ namespace syncd
     {                                                               \
         SWSS_LOG_ENTER();                                           \
         sai_deserialize_otn_ocm_channel_attr(name, attr);           \
+    }                                                               \
+                                                                    \
+    template <>                                                     \
+    void deserializeAttr(                                           \
+            _In_ const std::string &name,                           \
+            _Out_ sai_otn_wss_attr_t &attr)                         \
+    {                                                               \
+        SWSS_LOG_ENTER();                                           \
+        sai_deserialize_otn_wss_attr(name, attr);                   \
+    }                                                               \
+                                                                    \
+    template <>                                                     \
+    void deserializeAttr(                                           \
+            _In_ const std::string &name,                           \
+            _Out_ sai_otn_wss_spec_power_attr_t &attr)              \
+    {                                                               \
+        SWSS_LOG_ENTER();                                           \
+        sai_deserialize_otn_wss_spec_power_attr(name, attr);        \
     }                                                               \
                                                                     \
     template <>                                                     \

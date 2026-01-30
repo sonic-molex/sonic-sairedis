@@ -39,6 +39,22 @@ void sai_deserialize_otn_ocm_channel_attr(
         _In_ const std::string& s,
         _Out_ sai_otn_ocm_channel_attr_t& attr);
 
+// OTN wss
+std::string sai_serialize_otn_wss_attr(
+        _In_ const sai_otn_wss_attr_t counter);
+
+void sai_deserialize_otn_wss_attr(
+        _In_ const std::string& s,
+        _Out_ sai_otn_wss_attr_t& attr);
+
+// OTN wss spec power
+std::string sai_serialize_otn_wss_spec_power_attr(
+        _In_ const sai_otn_wss_spec_power_attr_t counter);
+
+void sai_deserialize_otn_wss_spec_power_attr(
+        _In_ const std::string& s,
+        _Out_ sai_otn_wss_spec_power_attr_t& attr);
+
 // OTN osc
 std::string sai_serialize_otn_osc_attr(
         _In_ const sai_otn_osc_attr_t counter);
