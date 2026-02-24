@@ -1,11 +1,11 @@
 #include "NotificationHandler.h"
-#include "FlowDump.h"
 #include "Workaround.h"
 #include "sairediscommon.h"
 
 #include "swss/logger.h"
 
 #include "meta/sai_serialize.h"
+#include "meta/sai_serialize_otn.h"
 
 #include <inttypes.h>
 
@@ -189,69 +189,6 @@ void NotificationHandler::onBfdSessionStateChange(
     enqueueNotification(SAI_SWITCH_NOTIFICATION_NAME_BFD_SESSION_STATE_CHANGE, s);
 }
 
-void NotificationHandler::onIcmpEchoSessionStateChange(
-        _In_ uint32_t count,
-        _In_ const sai_icmp_echo_session_state_notification_t *data)
-{
-    SWSS_LOG_ENTER();
-
-    std::string s = sai_serialize_icmp_echo_session_state_ntf(count, data);
-
-    enqueueNotification(SAI_SWITCH_NOTIFICATION_NAME_ICMP_ECHO_SESSION_STATE_CHANGE, s);
-}
-
-void NotificationHandler::onHaSetEvent(
-        _In_ uint32_t count,
-        _In_ const sai_ha_set_event_data_t *data)
-{
-    SWSS_LOG_ENTER();
-
-    std::string s = sai_serialize_ha_set_event_ntf(count, data);
-
-    enqueueNotification(SAI_SWITCH_NOTIFICATION_NAME_HA_SET_EVENT, s);
-}
-
-void NotificationHandler::onHaScopeEvent(
-        _In_ uint32_t count,
-        _In_ const sai_ha_scope_event_data_t *data)
-{
-    SWSS_LOG_ENTER();
-
-    std::string s = sai_serialize_ha_scope_event_ntf(count, data);
-
-    enqueueNotification(SAI_SWITCH_NOTIFICATION_NAME_HA_SCOPE_EVENT, s);
-}
-
-void NotificationHandler::onFlowBulkGetSessionEvent(
-        _In_ sai_object_id_t flow_bulk_session_id,
-        _In_ uint32_t count,
-        _In_ const sai_flow_bulk_get_session_event_data_t *data)
-{
-    SWSS_LOG_ENTER();
-
-    FlowDumpDataPtr flow_dump_data = std::make_shared<FlowDumpData>();
-    std::string s = sai_serialize_flow_bulk_get_session_event_ntf(flow_bulk_session_id, count, data);
-
-    for (uint32_t i = 0; i < count; ++i)
-    {
-        if (data[i].event_type == SAI_FLOW_BULK_GET_SESSION_EVENT_FLOW_ENTRY)
-        {
-            try
-            {
-                nlohmann::json json_line = FlowDumpSerializer::serializeFlowEntryToJson(data[i]);
-                flow_dump_data->json_lines.push_back(json_line);
-            }
-            catch (const std::exception& e)
-            {
-                SWSS_LOG_WARN("Failed to serialize flow entry at index %u: %s", i, e.what());
-                continue;
-            }
-        }
-    }
-
-    enqueueNotification(SAI_SWITCH_NOTIFICATION_NAME_FLOW_BULK_GET_SESSION_EVENT, s, flow_dump_data);
-}
-
 void NotificationHandler::enqueueNotification(
         _In_ const std::string& op,
         _In_ const std::string& data,
@@ -269,23 +206,6 @@ void NotificationHandler::enqueueNotification(
     }
 }
 
-void NotificationHandler::enqueueNotification(
-        _In_ const std::string& op,
-        _In_ const std::string& data,
-        _In_ FlowDumpDataPtr auxiliary_data)
-{
-    SWSS_LOG_ENTER();
-
-    SWSS_LOG_INFO("%s %s", op.c_str(), data.c_str());
-
-    swss::KeyOpFieldsValuesTuple item(op, data, std::vector<swss::FieldValueTuple>());
-
-    if (m_notificationQueue->enqueue(item, auxiliary_data))
-    {
-        m_processor->signal();
-    }
-}
-
 void NotificationHandler::onTwampSessionEvent(
         _In_ uint32_t count,
         _In_ const sai_twamp_session_event_notification_data_t *data)
@@ -297,36 +217,15 @@ void NotificationHandler::onTwampSessionEvent(
     enqueueNotification(SAI_SWITCH_NOTIFICATION_NAME_TWAMP_SESSION_EVENT, s);
 }
 
-void NotificationHandler::onTamTelTypeConfigChange(
-    _In_ sai_object_id_t tam_tel_id)
+void NotificationHandler::onOtnAlarmEvent(
+        _In_ uint32_t count,
+        _In_ const sai_otn_alarm_event_data_t *data)
 {
     SWSS_LOG_ENTER();
 
-    std::string s = sai_serialize_object_id(tam_tel_id);
+    std::string s = sai_serialize_otn_alarm_event_ntf(count, data);
 
-    enqueueNotification(SAI_SWITCH_NOTIFICATION_NAME_TAM_TEL_TYPE_CONFIG_CHANGE, s);
-}
-
-void NotificationHandler::onSwitchMacsecPostStatus(
-        _In_ sai_object_id_t switch_id,
-        _In_ sai_switch_macsec_post_status_t switch_macsec_post_status)
-{
-    SWSS_LOG_ENTER();
-
-    std::string s = sai_serialize_switch_macsec_post_status_ntf(switch_id, switch_macsec_post_status);
-
-    enqueueNotification(SAI_SWITCH_NOTIFICATION_NAME_SWITCH_MACSEC_POST_STATUS, s);
-}
-
-void NotificationHandler::onMacsecPostStatus(
-        _In_ sai_object_id_t macsec_id,
-        _In_ sai_macsec_post_status_t macsec_post_status)
-{
-    SWSS_LOG_ENTER();
-
-    std::string s = sai_serialize_macsec_post_status_ntf(macsec_id, macsec_post_status);
-
-    enqueueNotification(SAI_SWITCH_NOTIFICATION_NAME_MACSEC_POST_STATUS, s);
+    enqueueNotification(SAI_SWITCH_NOTIFICATION_NAME_OTN_ALARM_EVENT, s);
 }
 
 void NotificationHandler::enqueueNotification(

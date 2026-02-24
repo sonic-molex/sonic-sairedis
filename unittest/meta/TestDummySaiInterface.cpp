@@ -186,28 +186,6 @@ static void onSwitchAsicSdkHealthEvent(
     ntfCounter++;
 }
 
-static void onHaSetEvent(
-        _In_ uint32_t count,
-        _In_ const sai_ha_set_event_data_t *data)
-{
-    SWSS_LOG_ENTER();
-
-    SWSS_LOG_NOTICE("received: onHaSetEvent");
-
-    ntfCounter++;
-}
-
-static void onHaScopeEvent(
-        _In_ uint32_t count,
-        _In_ const sai_ha_scope_event_data_t *data)
-{
-    SWSS_LOG_ENTER();
-
-    SWSS_LOG_NOTICE("received: onHaScopeEvent");
-
-    ntfCounter++;
-}
-
 static void onBfdSessionStateChange(
         _In_ uint32_t count,
         _In_ const sai_bfd_session_state_notification_t *data)
@@ -215,17 +193,6 @@ static void onBfdSessionStateChange(
     SWSS_LOG_ENTER();
 
     SWSS_LOG_NOTICE("received: onBfdSessionStateChange");
-
-    ntfCounter++;
-}
-
-static void onIcmpEchoSessionStateChange(
-        _In_ uint32_t count,
-        _In_ const sai_icmp_echo_session_state_notification_t *data)
-{
-    SWSS_LOG_ENTER();
-
-    SWSS_LOG_NOTICE("received: onIcmpEchoSessionStateChange");
 
     ntfCounter++;
 }
@@ -241,12 +208,13 @@ void onTwampSessionEvent(
     ntfCounter++;
 }
 
-void onTamTelTypeConfigChange(
-        _In_ sai_object_id_t tam_tel_id)
+static void onOtnAlarmEvent(
+        _In_ uint32_t count,
+        _In_ const sai_otn_alarm_event_data_t *data)
 {
     SWSS_LOG_ENTER();
 
-    SWSS_LOG_NOTICE("received: onTamTelTypeConfigChange");
+    SWSS_LOG_NOTICE("received: onOtnAlarmEvent");
 
     ntfCounter++;
 }
@@ -266,10 +234,7 @@ TEST(DummySaiInterface, sendNotification)
     EXPECT_EQ(sai.enqueueNotificationToSend(SAI_SWITCH_ATTR_NAT_EVENT_NOTIFY), SAI_STATUS_SUCCESS);
     EXPECT_EQ(sai.enqueueNotificationToSend(SAI_SWITCH_ATTR_PORT_HOST_TX_READY_NOTIFY), SAI_STATUS_SUCCESS);
     EXPECT_EQ(sai.enqueueNotificationToSend(SAI_SWITCH_ATTR_QUEUE_PFC_DEADLOCK_NOTIFY), SAI_STATUS_SUCCESS);
-    EXPECT_EQ(sai.enqueueNotificationToSend(SAI_SWITCH_ATTR_HA_SET_EVENT_NOTIFY), SAI_STATUS_SUCCESS);
-    EXPECT_EQ(sai.enqueueNotificationToSend(SAI_SWITCH_ATTR_HA_SCOPE_EVENT_NOTIFY), SAI_STATUS_SUCCESS);
     EXPECT_EQ(sai.enqueueNotificationToSend(SAI_SWITCH_ATTR_BFD_SESSION_STATE_CHANGE_NOTIFY), SAI_STATUS_SUCCESS);
-    EXPECT_EQ(sai.enqueueNotificationToSend(SAI_SWITCH_ATTR_ICMP_ECHO_SESSION_STATE_CHANGE_NOTIFY), SAI_STATUS_SUCCESS);
     EXPECT_EQ(sai.enqueueNotificationToSend(SAI_SWITCH_ATTR_TWAMP_SESSION_EVENT_NOTIFY), SAI_STATUS_SUCCESS);
 
     EXPECT_EQ(sai.enqueueNotificationToSend(SAI_SWITCH_ATTR_SWITCH_STATE_CHANGE_NOTIFY), SAI_STATUS_SUCCESS);
@@ -277,7 +242,7 @@ TEST(DummySaiInterface, sendNotification)
     EXPECT_EQ(sai.enqueueNotificationToSend(SAI_SWITCH_ATTR_PORT_STATE_CHANGE_NOTIFY), SAI_STATUS_SUCCESS);
     EXPECT_EQ(sai.enqueueNotificationToSend(SAI_SWITCH_ATTR_SHUTDOWN_REQUEST_NOTIFY), SAI_STATUS_SUCCESS);
 
-    EXPECT_EQ(sai.enqueueNotificationToSend(SAI_SWITCH_ATTR_TAM_TEL_TYPE_CONFIG_CHANGE_NOTIFY), SAI_STATUS_SUCCESS);
+    EXPECT_EQ(sai.enqueueNotificationToSend(SAI_SWITCH_ATTR_OTN_ALARM_EVENT_NOTIFY), SAI_STATUS_SUCCESS);
 
     sai_attribute_t attr;
 
@@ -316,28 +281,16 @@ TEST(DummySaiInterface, sendNotification)
     attr.value.ptr = (void*)&onQueuePfcDeadlock;
     sai.set(SAI_OBJECT_TYPE_SWITCH, switch_id, &attr);
 
-    attr.id = SAI_SWITCH_ATTR_HA_SET_EVENT_NOTIFY;
-    attr.value.ptr = (void*)&onHaSetEvent;
-    sai.set(SAI_OBJECT_TYPE_SWITCH, switch_id, &attr);
-
-    attr.id = SAI_SWITCH_ATTR_HA_SCOPE_EVENT_NOTIFY;
-    attr.value.ptr = (void*)&onHaScopeEvent;
-    sai.set(SAI_OBJECT_TYPE_SWITCH, switch_id, &attr);
-
     attr.id = SAI_SWITCH_ATTR_BFD_SESSION_STATE_CHANGE_NOTIFY;
     attr.value.ptr = (void*)&onBfdSessionStateChange;
-    sai.set(SAI_OBJECT_TYPE_SWITCH, switch_id, &attr);
-
-    attr.id = SAI_SWITCH_ATTR_ICMP_ECHO_SESSION_STATE_CHANGE_NOTIFY;
-    attr.value.ptr = (void*)&onIcmpEchoSessionStateChange;
     sai.set(SAI_OBJECT_TYPE_SWITCH, switch_id, &attr);
 
     attr.id = SAI_SWITCH_ATTR_TWAMP_SESSION_EVENT_NOTIFY;
     attr.value.ptr = (void*)&onTwampSessionEvent;
     sai.set(SAI_OBJECT_TYPE_SWITCH, switch_id, &attr);
 
-    attr.id = SAI_SWITCH_ATTR_TAM_TEL_TYPE_CONFIG_CHANGE_NOTIFY;
-    attr.value.ptr = (void*)&onTamTelTypeConfigChange;
+    attr.id = SAI_SWITCH_ATTR_OTN_ALARM_EVENT_NOTIFY;
+    attr.value.ptr = (void*)&onOtnAlarmEvent;
     sai.set(SAI_OBJECT_TYPE_SWITCH, switch_id, &attr);
 
     EXPECT_EQ(sai.start(), SAI_STATUS_SUCCESS);
@@ -346,5 +299,5 @@ TEST(DummySaiInterface, sendNotification)
 
     EXPECT_EQ(sai.stop(), SAI_STATUS_SUCCESS);
 
-    EXPECT_EQ(ntfCounter, 4 + 7 + 1);
+    EXPECT_EQ(ntfCounter, 4 + 6);
 }

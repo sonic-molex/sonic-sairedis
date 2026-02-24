@@ -36,15 +36,9 @@ libsaimeta_la_SOURCES = \
 				NotificationSwitchShutdownRequest.cpp \
 				NotificationSwitchStateChange.cpp \
 				NotificationBfdSessionStateChange.cpp \
-				NotificationIcmpEchoSessionStateChange.cpp \
-				NotificationHaSetEvent.cpp \
-				NotificationHaScopeEvent.cpp \
-				NotificationFlowBulkGetSessionEvent.cpp \
 				NotificationTwampSessionEvent.cpp \
 				NotificationPortHostTxReadyEvent.cpp \
-				NotificationTamTelTypeConfigChange.cpp \
-				NotificationSwitchMacsecPostStatus.cpp \
-				NotificationMacsecPostStatus.cpp \
+				NotificationOtnAlarmEvent.cpp \
 				NumberOidIndexGenerator.cpp \
 				OidRefCounter.cpp \
 				PerformanceIntervalTimer.cpp \

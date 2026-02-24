@@ -26,13 +26,7 @@ tests_SOURCES = \
 				TestNotificationSwitchAsicSdkHealthEvent.cpp \
 				TestNotificationSwitchStateChange.cpp \
 				TestNotificationBfdSessionStateChange.cpp \
-				TestNotificationIcmpEchoSessionStateChange.cpp \
-				TestNotificationHaScopeEvent.cpp \
-				TestNotificationHaSetEvent.cpp \
-				TestNotificationFlowBulkGetSessionEvent.cpp \
-				TestNotificationTam.cpp \
-                                TestNotificationMacsecPostStatus.cpp \
-                                TestNotificationSwitchMacsecPostStatus.cpp \
+				TestNotificationOtnAlarmEvent.cpp \
 				TestOidRefCounter.cpp \
 				TestPerformanceIntervalTimer.cpp \
 				TestPortRelatedSet.cpp \
