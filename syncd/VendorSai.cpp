@@ -714,9 +714,9 @@ sai_status_t VendorSai::bulkSet(
     SWSS_LOG_ENTER();
     VENDOR_CHECK_API_INITIALIZED();
 
-    sai_bulk_object_set_attribute_fn ptr;
+    sai_bulk_object_set_attribute_fn ptr = nullptr;
 
-    switch (object_type)
+    switch ((int)object_type)
     {
         case SAI_OBJECT_TYPE_PORT:
             ptr = m_apis.port_api->set_ports_attribute;
@@ -728,6 +728,10 @@ sai_status_t VendorSai::bulkSet(
 
         case SAI_OBJECT_TYPE_QUEUE:
             ptr = m_apis.queue_api->set_queues_attribute;
+            break;
+
+        case SAI_OBJECT_TYPE_OTN_WSS_SPEC_POWER:
+            ptr = m_apis.otn_wss_api ? m_apis.otn_wss_api->set_otn_wss_spec_powers_attribute : nullptr;
             break;
 
         default:
