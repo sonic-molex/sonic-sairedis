@@ -71,6 +71,7 @@ Proxy::Proxy(
     m_swNtf.onPortHostTxReady = std::bind(&Proxy::onPortHostTxReady, this, _1, _2, _3);
     m_swNtf.onTwampSessionEvent = std::bind(&Proxy::onTwampSessionEvent, this, _1, _2);
     m_swNtf.onTamTelTypeConfigChange = std::bind(&Proxy::onTamTelTypeConfigChange, this, _1);
+    m_swNtf.onOtnAlarmEvent = std::bind(&Proxy::onOtnAlarmEvent, this, _1, _2);
 
     m_sn = m_swNtf.getSwitchNotifications();
 
