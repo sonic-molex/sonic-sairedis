@@ -77,12 +77,12 @@ namespace syncd
                                                                     \
         if (context_name == FlexCounterOtn::COUNTER_TYPE_OTN_WSS_ATTR)\
         {                                                           \
-            return std::make_shared<AttrContext<sai_otn_wss_attr_t>>(context_name, (sai_object_type_t)SAI_OBJECT_TYPE_OTN_WSS, vendorSai.get(), statsMode);\
+            return std::make_shared<AttrContext<sai_otn_wss_attr_t>>(context_name, instance, (sai_object_type_t)SAI_OBJECT_TYPE_OTN_WSS, vendorSai.get(), statsMode);\
         }                                                           \
                                                                     \
         if (context_name == FlexCounterOtn::COUNTER_TYPE_OTN_WSS_SPEC_POWER_ATTR)\
         {                                                           \
-            return std::make_shared<AttrContext<sai_otn_wss_spec_power_attr_t>>(context_name, (sai_object_type_t)SAI_OBJECT_TYPE_OTN_WSS_SPEC_POWER, vendorSai.get(), statsMode);\
+            return std::make_shared<AttrContext<sai_otn_wss_spec_power_attr_t>>(context_name, instance, (sai_object_type_t)SAI_OBJECT_TYPE_OTN_WSS_SPEC_POWER, vendorSai.get(), statsMode);\
         }                                                           \
                                                                     \
         if (context_name == FlexCounterOtn::COUNTER_TYPE_OTN_OSC_ATTR)\

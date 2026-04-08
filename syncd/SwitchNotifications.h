@@ -170,7 +170,6 @@ namespace syncd
                             .on_icmp_echo_session_state_change = &Slot<context>::onIcmpEchoSessionStateChange,
                             .on_extended_port_state_change = nullptr,
                             .on_tam_tel_type_config_change = &Slot<context>::onTamTelTypeConfigChange,
-                            .on_otn_alarm_event = &Slot<context>::onOtnAlarmEvent,
                             .on_macsec_post_status = &Slot<context>::onMacsecPostStatus,
                             .on_ipsec_post_status = &Slot<context>::onIpsecPostStatus,
                             .on_switch_macsec_post_status = &Slot<context>::onSwitchMacsecPostStatus,
@@ -178,6 +177,7 @@ namespace syncd
                             .on_ha_set_event = &Slot<context>::onHaSetEvent,
                             .on_ha_scope_event = &Slot<context>::onHaScopeEvent,
                             .on_flow_bulk_get_session_event = &Slot<context>::onFlowBulkGetSessionEvent,
+                            .on_otn_alarm_event = &Slot<context>::onOtnAlarmEvent,
                             }) { }
 
                 virtual ~Slot() {}

@@ -27,6 +27,7 @@ libSyncd_a_SOURCES = \
 				DisabledRedisClient.cpp \
 				FlexCounter.cpp \
 				FlexCounterManager.cpp \
+				FlexCounterOtn.cpp \
 				FlowDump.cpp \
 				GlobalSwitchId.cpp \
 				HardReiniter.cpp \
