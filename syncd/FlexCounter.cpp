@@ -3882,18 +3882,14 @@ void FlexCounter::bulkAddCounter(
         }
         else
         {
-            bool handled = false;
-            for (size_t i = 0; i < vids.size(); i++)
+            if (m_flexCounterOtn->bulkAddCounter(vids, rids, objectType, field, idStrings))
             {
-                handled = m_flexCounterOtn->addCounter(vids[i], rids[i], objectType, field, idStrings);
+                continue;
             }
 
-            if (!handled)
-            {
-                SWSS_LOG_ERROR("Object type and field combination is not supported, object type %s, field %s",
-                        sai_serialize_object_type(objectType).c_str(),
-                        field.c_str());
-            }
+            SWSS_LOG_ERROR("Object type and field combination is not supported, object type %s, field %s",
+                    sai_serialize_object_type(objectType).c_str(),
+                    field.c_str());
         }
     }
 

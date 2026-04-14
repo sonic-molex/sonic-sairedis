@@ -100,6 +100,56 @@ bool FlexCounterOtn::addCounter(
     return false;
 }
 
+bool FlexCounterOtn::bulkAddCounter(
+        _In_ const std::vector<sai_object_id_t> &vids,
+        _In_ const std::vector<sai_object_id_t> &rids,
+        _In_ sai_object_type_t objectType,
+        _In_ const std::string &field,
+        _In_ const std::vector<std::string> &idStrings)
+{
+    SWSS_LOG_ENTER();
+
+    sai_object_type_extensions_t extObjectType = (sai_object_type_extensions_t)objectType;
+
+    if (extObjectType == SAI_OBJECT_TYPE_OTN_ATTENUATOR && field == OTN_ATTENUATOR_ATTR_ID_LIST)
+    {
+        m_getCounterContext(COUNTER_TYPE_OTN_ATTENUATOR_ATTR)->bulkAddObject(vids, rids, idStrings, "");
+        return true;
+    }
+
+    if (extObjectType == SAI_OBJECT_TYPE_OTN_OA && field == OTN_OA_ATTR_ID_LIST)
+    {
+        m_getCounterContext(COUNTER_TYPE_OTN_OA_ATTR)->bulkAddObject(vids, rids, idStrings, "");
+        return true;
+    }
+
+    if (extObjectType == SAI_OBJECT_TYPE_OTN_OCM_CHANNEL && field == OTN_OCM_CHANNEL_ATTR_ID_LIST)
+    {
+        m_getCounterContext(COUNTER_TYPE_OTN_OCM_CHANNEL_ATTR)->bulkAddObject(vids, rids, idStrings, "");
+        return true;
+    }
+
+    if (extObjectType == SAI_OBJECT_TYPE_OTN_WSS && field == OTN_WSS_ATTR_ID_LIST)
+    {
+        m_getCounterContext(COUNTER_TYPE_OTN_WSS_ATTR)->bulkAddObject(vids, rids, idStrings, "");
+        return true;
+    }
+
+    if (extObjectType == SAI_OBJECT_TYPE_OTN_WSS_SPEC_POWER && field == OTN_WSS_SPEC_POWER_ATTR_ID_LIST)
+    {
+        m_getCounterContext(COUNTER_TYPE_OTN_WSS_SPEC_POWER_ATTR)->bulkAddObject(vids, rids, idStrings, "");
+        return true;
+    }
+
+    if (extObjectType == SAI_OBJECT_TYPE_OTN_OSC && field == OTN_OSC_ATTR_ID_LIST)
+    {
+        m_getCounterContext(COUNTER_TYPE_OTN_OSC_ATTR)->bulkAddObject(vids, rids, idStrings, "");
+        return true;
+    }
+
+    return false;
+}
+
 bool FlexCounterOtn::removeCounter(
         _In_ sai_object_id_t vid,
         _In_ sai_object_type_t objectType)

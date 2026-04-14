@@ -30,6 +30,13 @@ namespace syncd
                 _In_ const std::string &field,
                 _In_ const std::vector<std::string> &idStrings);
 
+        bool bulkAddCounter(
+                _In_ const std::vector<sai_object_id_t> &vids,
+                _In_ const std::vector<sai_object_id_t> &rids,
+                _In_ sai_object_type_t objectType,
+                _In_ const std::string &field,
+                _In_ const std::vector<std::string> &idStrings);
+
         bool removeCounter(
                 _In_ sai_object_id_t vid,
                 _In_ sai_object_type_t objectType);
