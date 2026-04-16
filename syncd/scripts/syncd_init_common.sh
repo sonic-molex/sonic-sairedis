@@ -620,7 +620,7 @@ config_syncd()
         config_syncd_xsight
     elif [ "$SONIC_ASIC_TYPE" == "pensando" ]; then
         config_syncd_pensando
-    elif [ "$SONIC_ASIC_TYPE" == "otn-kvm" ]; then
+    elif [ "$SONIC_ASIC_TYPE" == "otn-kvm" ] || [ "$SONIC_ASIC_TYPE" == "otn-molex" ]; then
         config_syncd_vs
     else
         echo "Unknown ASIC type $SONIC_ASIC_TYPE"
