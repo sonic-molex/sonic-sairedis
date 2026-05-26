@@ -679,6 +679,8 @@ config_syncd()
         config_syncd_xsight
     elif [ "$SONIC_ASIC_TYPE" == "pensando" ]; then
 	config_syncd_pensando
+    elif [ "$SONIC_ASIC_TYPE" == "ocs-kvm" ] || [ "$SONIC_ASIC_TYPE" == "ocs-molex" ]; then
+        config_syncd_vs
     elif [ "$SONIC_ASIC_TYPE" == "clounix" ]; then
         config_syncd_clounix
     else

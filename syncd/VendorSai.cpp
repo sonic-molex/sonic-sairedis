@@ -580,6 +580,10 @@ sai_status_t VendorSai::bulkCreate(
             ptr = m_apis.dash_outbound_port_map_api->create_outbound_port_maps;
             break;
 
+        case (int)SAI_OBJECT_TYPE_OCS_CROSS_CONNECT:
+            ptr = m_apis.ocs_cross_connect_api->create_ocs_cross_connects;
+            break;
+
         default:
             SWSS_LOG_ERROR("not implemented %s, FIXME", sai_serialize_object_type(object_type).c_str());
             return SAI_STATUS_NOT_IMPLEMENTED;
@@ -681,6 +685,10 @@ sai_status_t VendorSai::bulkRemove(
 
         case SAI_OBJECT_TYPE_OUTBOUND_PORT_MAP:
             ptr = m_apis.dash_outbound_port_map_api->remove_outbound_port_maps;
+            break;
+
+        case (int)SAI_OBJECT_TYPE_OCS_CROSS_CONNECT:
+            ptr = m_apis.ocs_cross_connect_api->remove_ocs_cross_connects;
             break;
 
         default:

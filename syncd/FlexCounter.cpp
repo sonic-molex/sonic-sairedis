@@ -3028,6 +3028,8 @@ private:
     bool m_initalized = false;
 };
 
+FLEX_COUNTER_EXT_IMPLEMENT();
+
 FlexCounter::FlexCounter(
         _In_ const std::string& instanceId,
         _In_ std::shared_ptr<sairedis::SaiInterface> vendorSai,
@@ -3044,6 +3046,10 @@ FlexCounter::FlexCounter(
 
     m_enable = false;
     m_isDiscarded = false;
+
+    m_flexCounterExt = make_shared<FlexCounterExt>(
+            std::bind(&FlexCounter::getCounterContext, this, std::placeholders::_1),
+            std::bind(&FlexCounter::hasCounterContext, this, std::placeholders::_1));
 
     m_isTcpConn = swss::SonicDBConfig::getDbSock(dbCounters).empty();
 
@@ -3233,6 +3239,11 @@ void FlexCounter::addCounterPlugin(
             }
             else
             {
+                if (m_flexCounterExt->addCounterPlugin(field, shaStrings))
+                {
+                    continue;
+                }
+
                 SWSS_LOG_ERROR("Field is not supported %s", field.c_str());
             }
         }
@@ -3439,6 +3450,12 @@ std::shared_ptr<BaseCounterContext> FlexCounter::createCounterContext(
         // platform can set SAI_STATS_EXT_SWITCH_SUPPORTED=0 in sai.profile to disable.
         context->use_sai_stats_ext = m_vendorSai->isSwitchStatsExtSupported();
         return context;
+    }
+
+    auto ext_context = createExtCounterContext(context_name, m_vendorSai, m_statsMode);
+    if (ext_context != nullptr)
+    {
+        return ext_context;
     }
 
     SWSS_LOG_THROW("Invalid counter type %s", context_name.c_str());
@@ -3771,6 +3788,11 @@ void FlexCounter::removeCounter(
     }
     else
     {
+        if (m_flexCounterExt->removeCounter(vid, objectType))
+        {
+            return;
+        }
+
         SWSS_LOG_ERROR("Object type for removal not supported, %s",
                 sai_serialize_object_type(objectType).c_str());
     }
@@ -3817,6 +3839,11 @@ void FlexCounter::addCounter(
         }
         else
         {
+            if (m_flexCounterExt->addCounter(vid, rid, objectType, field, idStrings))
+            {
+                continue;
+            }
+
             SWSS_LOG_ERROR("Object type and field combination is not supported, object type %s, field %s",
                     sai_serialize_object_type(objectType).c_str(),
                     field.c_str());
@@ -3878,9 +3905,20 @@ void FlexCounter::bulkAddCounter(
         }
         else
         {
-            SWSS_LOG_ERROR("Object type and field combination is not supported, object type %s, field %s",
-                    sai_serialize_object_type(objectType).c_str(),
-                    field.c_str());
+            bool handled = false;
+            for (size_t i = 0; i < vids.size(); i++)
+            {
+                handled = m_flexCounterExt->addCounter(vids[i], rids[i], objectType, field, idStrings);
+                if (!handled)
+                    break;
+            }
+
+            if (!handled)
+            {
+                SWSS_LOG_ERROR("Object type and field combination is not supported, object type %s, field %s",
+                        sai_serialize_object_type(objectType).c_str(),
+                        field.c_str());
+            }
         }
     }
 

@@ -26,6 +26,7 @@ libSyncd_a_SOURCES = \
 				ComparisonLogic.cpp \
 				DisabledRedisClient.cpp \
 				FlexCounter.cpp \
+				FlexCounterExt.cpp \
 				FlexCounterManager.cpp \
 				FlowDump.cpp \
 				GlobalSwitchId.cpp \

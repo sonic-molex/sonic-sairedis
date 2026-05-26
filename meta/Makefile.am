@@ -56,6 +56,7 @@ libsaimeta_la_SOURCES = \
 				SaiObject.cpp \
 				SaiObjectCollection.cpp \
 				SaiSerialize.cpp \
+				sai_serialize_ext.cpp \
 				SelectableChannel.cpp \
 				DummySaiInterface.cpp \
 				ZeroMQSelectableChannel.cpp
