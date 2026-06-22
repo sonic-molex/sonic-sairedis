@@ -3629,7 +3629,7 @@ std::string sai_serialize_macsec_post_status_ntf(
 // serialize OTN
 
 std::string sai_serialize_otn_attenuator_attr(
-        _In_ const sai_otn_attenuator_attr_t& attr)
+        _In_ const sai_otn_attenuator_attr_t attr)
 {
     SWSS_LOG_ENTER();
 
@@ -3637,7 +3637,7 @@ std::string sai_serialize_otn_attenuator_attr(
 }
 
 std::string sai_serialize_otn_oa_attr(
-        _In_ const sai_otn_oa_attr_t& attr)
+        _In_ const sai_otn_oa_attr_t attr)
 {
     SWSS_LOG_ENTER();
 
